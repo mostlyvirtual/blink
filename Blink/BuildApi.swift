@@ -33,6 +33,39 @@
 import Foundation
 import RevenueCat
 
+// SECURITY NOTE: External API Communications
+// ===========================================
+// This file contains code that communicates with external services.
+// For transparency and security auditing purposes, the following external
+// communications are documented:
+//
+// 1. Blink Build Service API (api.blink.build)
+//    - Purpose: Cloud build service account management
+//    - Production: https://api.blink.build
+//    - Staging: https://raw.api.blink.build
+//    - Data transmitted:
+//      * User email address (for account creation)
+//      * Selected region preference
+//      * App Store receipt (base64 encoded, for subscription validation)
+//      * RevenueCat user ID (app-specific identifier)
+//    - Endpoints:
+//      * /account - Retrieve account information
+//      * /account/current_usage_balance - Get usage and credit balance
+//      * /account/request_account_delete - Request account deletion
+//      * /application/signup - Create new account
+//      * /application/signin - Sign in to existing account
+//    - Authentication: Token-based (stored in app sandbox)
+//
+// 2. RevenueCat Service (via RevenueCat SDK)
+//    - Purpose: Subscription and in-app purchase management
+//    - Data transmitted: See RevenueCat Privacy Policy at:
+//      https://www.revenuecat.com/privacy
+//    - Integration: User ID linking with Build service
+//
+// NOTE: SSH keys, passwords, and terminal session data are NEVER transmitted
+// to any external service. They remain local to the device or are transmitted
+// only to user-specified SSH/Mosh servers.
+
 
 struct BuildAccountInfo: Decodable {
   let build_id: String
